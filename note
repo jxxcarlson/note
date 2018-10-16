@@ -1,0 +1,33 @@
+#! /usr/bin/env racket
+#lang racket
+
+(require racket/string)
+
+(define args (current-command-line-arguments))
+
+(define (get-filename) 
+   (vector-ref args 0))
+
+(define (get-word)
+   (vector-ref args 1))
+
+(define (get-data) 
+  (file->string (get-filename))
+)
+
+
+(define (get-string-list)
+   (string-split 
+      (get-data)
+    )
+)
+
+(define (contains-word? word phrase) (string-contains? phrase word))
+
+(define (filter-string-list key string-list) 
+   (filter (curry contains-word? key) string-list))
+
+(println (filter-string-list (get-word) (get-string-list)))
+
+
+
