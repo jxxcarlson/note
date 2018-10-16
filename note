@@ -39,8 +39,14 @@
 
 ; (define out (open-output-file data-file))
 
+; (define (save-string str)
+;   (write (string-append str "\n") (open-output-file data-file #:exists 'append #:mode 'text))
+; )
+
 (define (save-string str)
-   (write (string-append str "\n") (open-output-file data-file #:exists 'append #:mode 'text))
+   (with-output-to-file data-file
+     (lambda () (printf (string-append str "\n")))
+     #:exists 'append #:mode 'text)
 )
 
 (define (string-concat-aux str strlist) 
