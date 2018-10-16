@@ -3,22 +3,24 @@
 
 (require racket/string)
 
-(define args (current-command-line-arguments))
+(define data-file "/Users/carlson/dev/racket/data.txt")
 
-(define (get-filename) 
-   (vector-ref args 0))
-
-(define (get-word)
-   (vector-ref args 1))
-
-(define (get-data) 
-  (file->string (get-filename))
+(define args 
+   (vector->list 
+      (current-command-line-arguments)
+   )
 )
 
 
-(define (get-string-list)
+
+
+(define (get-data filename) 
+  (file->string filename)
+)
+
+(define (get-string-list filename)
    (string-split 
-      (get-data)
+      (get-data filename)
     )
 )
 
@@ -27,7 +29,40 @@
 (define (filter-string-list key string-list) 
    (filter (curry contains-word? key) string-list))
 
-(println (filter-string-list (get-word) (get-string-list)))
+(define (find-matches args)
+  (println (filter-string-list (car args) (get-string-list data-file)))
+)
 
+(define (append-item args)
+  (string-append (get-data data-file) (car args) "\n")
+)
 
+; (define out (open-output-file data-file))
 
+(define (save-string str)
+   (write (string-append str "\n") (open-output-file data-file #:exists 'append #:mode 'text))
+)
+
+(define (string-concat-aux str strlist) 
+  (if  (null? strlist)
+    str
+    (string-concat-aux
+       (string-append str (string-append (car strlist) " "))
+       (cdr strlist))
+    )
+  )
+
+(define (string-concat strlist)
+  (string-trim
+     (string-concat-aux "" strlist)
+     )
+  )
+
+(define (process-args args) 
+  (cond 
+     [(string=? (car args) "-a") (save-string (string-concat (cdr args)))  ]
+     [(= 1 1) (find-matches args)]
+  )
+)
+
+(process-args args)
