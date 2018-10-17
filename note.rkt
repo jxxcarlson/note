@@ -78,6 +78,7 @@
 (define (process-args args) 
   (cond 
      [(string=? (car args) "-a") (save-string (string-concat (cdr args)))  ]
+     [(string=? (car args) "-c") (println (length  (get-string-list data-file)))  ]
      [else (find-matches args)]
   )
 )
