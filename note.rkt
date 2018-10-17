@@ -3,7 +3,6 @@
 
 (require racket/string)
 
-
 ;; Files
 
 (define data-file "/Users/carlson/dev/racket/data.txt")

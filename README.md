@@ -16,4 +16,14 @@ For more information, say `note -h`.
 
 ## Installation
 
-Do `git clone`
+1. Do `git clone https://github.com/jxxcarlson/note.git`
+   in some convenient directory on your machine.
+
+2. Do `touch data.txt`
+
+3. Edit line 8, `(define data-file "/Users/carlson/dev/racket/data.txt")`,
+   so that it points to `data.txt`
+
+4. In your `.profile`, create an alias pointng to `note.rkt`
+
+5. In your currenct directory, do `source ~/.profile`
