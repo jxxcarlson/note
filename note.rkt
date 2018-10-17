@@ -48,6 +48,15 @@
   )
 )
 
+(define (display-data)
+  (display 
+    (string-concat 
+       (get-string-list data-file)
+      "\n"
+    )
+  )
+)
+
 (define (filter-string-list-many keys string-list)
   (if (null? keys)
     string-list
@@ -73,6 +82,22 @@
 )
 
 
+;; ???
+
+(define help-strings 
+  (list "---------------------------------------------"
+        "  -a x y z  -- append x y z to the data-file"
+        "  -c        -- line count of data file"
+        "  -s        -- display all data"
+        "  x         -- return lines containging x"
+        "  x y       -- return lines containg x and y"
+        "---------------------------------------------"
+))
+
+(define (display-help)
+  (display (string-concat help-strings "\n"))
+)
+
 ;; Process args
 
 (define args 
@@ -86,6 +111,9 @@
   (cond 
      [(string=? (car args) "-a") (save-string (string-concat (cdr args) " "))  ]
      [(string=? (car args) "-c") (println (length  (get-string-list data-file)))  ]
+     [(string=? (car args) "-e") (shell-execute #f "edit" data-file (current-directory) 'sw_shownormal)  ]
+     [(string=? (car args) "-s") (display-data)  ]
+     [(string=? (car args) "-h") (display-help)  ]
      [else (find-matches args)]
   )
 )
