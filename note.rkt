@@ -13,10 +13,12 @@
   (file->string filename)
 )
 
+(define record-terminator "\n--\n")
+
 (define (get-string-list filename)
    (string-split 
       (get-data filename)
-      "\n"
+      record-terminator
     )
 )
 
@@ -27,7 +29,7 @@
 
 (define (save-string str)
    (with-output-to-file data-file
-     (lambda () (printf (string-append str "\n")))
+     (lambda () (printf (string-append str record-terminator)))
      #:exists 'append #:mode 'text)
 )
 
