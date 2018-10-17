@@ -24,13 +24,12 @@
   (string-append (get-data data-file) (car args) "\n")
 )
 
+
 (define (save-string str)
    (with-output-to-file data-file
      (lambda () (printf (string-append str "\n")))
      #:exists 'append #:mode 'text)
 )
-
-
 
 ;; String lists
 
@@ -81,6 +80,14 @@
      )
 )
 
+(define (random-element list)
+  (car (shuffle list)))
+
+(define (save-string-guard args)
+  (if (null? args)
+    (display "-a option needs an argument")
+    (save-string (string-concat args " ") ))
+)
 
 ;; ???
 
@@ -88,9 +95,11 @@
   (list "---------------------------------------------"
         "  -a x y z  -- append x y z to the data-file"
         "  -c        -- line count of data file"
-        "  -s        -- display all data"
-        "  x         -- return lines containging x"
-        "  x y       -- return lines containg x and y"
+        "  -l        -- location of data file"
+        "  -r        -- random line"
+        "  -s        -- show all data"
+        "  x         -- show lines containging x"
+        "  x y       -- show lines containg x and y"
         "---------------------------------------------" 
 ))
 
@@ -106,15 +115,22 @@
    )
 )
 
+(define (display-data-location)
+  (display data-file)
+)
+
+
 
 (define (process-args args) 
   (cond 
      [(null? args) (display-help)]
-     [(string=? (car args) "-a") (save-string (string-concat (cdr args) " "))  ]
+     [(string=? (car args) "-a") (save-string-guard (cdr args))  ]
      [(string=? (car args) "-c") (println (length  (get-string-list data-file)))  ]
+     [(string=? (car args) "-l") (display-data-location)  ]
      [(string=? (car args) "-e") (shell-execute #f "edit" data-file (current-directory) 'sw_shownormal)  ]
+     [(string=? (car args) "-h") (display-help)]
+     [(string=? (car args) "-r") (display (random-element (get-string-list data-file)))  ]
      [(string=? (car args) "-s") (display-data)  ]
-     [(string=? (car args) "-h") (display-help)  ]
      [else (find-matches args)]
   )
 )
