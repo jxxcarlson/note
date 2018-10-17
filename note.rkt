@@ -40,7 +40,14 @@
    (filter (curry contains-word? key) string-list))
 
 (define (find-matches args)
-  (println (filter-string-list (car args) (get-string-list data-file)))
+  (println (filter-string-list-many args (get-string-list data-file)))
+)
+
+(define (filter-string-list-many keys string-list)
+  (if (null? keys)
+    string-list
+    (filter-string-list-many (cdr keys) (filter-string-list (car keys) string-list))
+  )  
 )
 
 (define (string-concat-aux str strlist) 
