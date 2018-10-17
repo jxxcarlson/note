@@ -91,7 +91,7 @@
         "  -s        -- display all data"
         "  x         -- return lines containging x"
         "  x y       -- return lines containg x and y"
-        "---------------------------------------------"
+        "---------------------------------------------" 
 ))
 
 (define (display-help)
@@ -109,6 +109,7 @@
 
 (define (process-args args) 
   (cond 
+     [(null? args) (display-help)]
      [(string=? (car args) "-a") (save-string (string-concat (cdr args) " "))  ]
      [(string=? (car args) "-c") (println (length  (get-string-list data-file)))  ]
      [(string=? (car args) "-e") (shell-execute #f "edit" data-file (current-directory) 'sw_shownormal)  ]
