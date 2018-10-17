@@ -3,15 +3,10 @@
 
 (require racket/string)
 
+
+;; Files
+
 (define data-file "/Users/carlson/dev/racket/data.txt")
-
-(define args 
-   (vector->list 
-      (current-command-line-arguments)
-   )
-)
-
-
 
 
 (define (get-data filename) 
@@ -21,8 +16,23 @@
 (define (get-string-list filename)
    (string-split 
       (get-data filename)
+      "\n"
     )
 )
+
+(define (append-item args)
+  (string-append (get-data data-file) (car args) "\n")
+)
+
+(define (save-string str)
+   (with-output-to-file data-file
+     (lambda () (printf (string-append str "\n")))
+     #:exists 'append #:mode 'text)
+)
+
+
+
+;; String lists
 
 (define (contains-word? word phrase) (string-contains? phrase word))
 
@@ -31,22 +41,6 @@
 
 (define (find-matches args)
   (println (filter-string-list (car args) (get-string-list data-file)))
-)
-
-(define (append-item args)
-  (string-append (get-data data-file) (car args) "\n")
-)
-
-; (define out (open-output-file data-file))
-
-; (define (save-string str)
-;   (write (string-append str "\n") (open-output-file data-file #:exists 'append #:mode 'text))
-; )
-
-(define (save-string str)
-   (with-output-to-file data-file
-     (lambda () (printf (string-append str "\n")))
-     #:exists 'append #:mode 'text)
 )
 
 (define (string-concat-aux str strlist) 
@@ -64,11 +58,23 @@
      )
   )
 
+
+;; Process args
+
+(define args 
+   (vector->list 
+      (current-command-line-arguments)
+   )
+)
+
+
 (define (process-args args) 
   (cond 
      [(string=? (car args) "-a") (save-string (string-concat (cdr args)))  ]
-     [(= 1 1) (find-matches args)]
+     [else (find-matches args)]
   )
 )
+
+;; Main
 
 (process-args args)
