@@ -40,7 +40,12 @@
    (filter (curry contains-word? key) string-list))
 
 (define (find-matches args)
-  (println (filter-string-list-many args (get-string-list data-file)))
+  (display 
+    (string-concat 
+      (filter-string-list-many args (get-string-list data-file))
+      "\n"
+    )
+  )
 )
 
 (define (filter-string-list-many keys string-list)
@@ -50,20 +55,22 @@
   )  
 )
 
-(define (string-concat-aux str strlist) 
+(define (string-concat-aux str strlist suffix) 
   (if  (null? strlist)
     str
     (string-concat-aux
-       (string-append str (string-append (car strlist) " "))
-       (cdr strlist))
+       (string-append str (string-append (car strlist) suffix))
+       (cdr strlist)
+       suffix
     )
   )
+)
 
-(define (string-concat strlist)
+(define (string-concat strlist suffix)
   (string-trim
-     (string-concat-aux "" strlist)
+     (string-concat-aux "" strlist suffix)
      )
-  )
+)
 
 
 ;; Process args
@@ -77,7 +84,7 @@
 
 (define (process-args args) 
   (cond 
-     [(string=? (car args) "-a") (save-string (string-concat (cdr args)))  ]
+     [(string=? (car args) "-a") (save-string (string-concat (cdr args) " "))  ]
      [(string=? (car args) "-c") (println (length  (get-string-list data-file)))  ]
      [else (find-matches args)]
   )
