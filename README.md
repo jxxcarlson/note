@@ -21,9 +21,20 @@ For more information, say `note -h`.
 
 2. Do `touch data.txt`
 
-3. Edit line 8, `(define data-file "/Users/carlson/dev/racket/data.txt")`,
+3. Edit line 9, `(define data-file "/Users/carlson/dev/racket/data.txt")`,
    so that it points to `data.txt`
 
 4. In your `.profile`, create an alias pointng to `note.rkt`
 
 5. In your currenct directory, do `source ~/.profile`
+
+## Customization
+
+The `note` tool is configured so that running `note -e` will
+bring up the data file in emacs for editing. To use another
+editor, modify this bit of code:
+
+```
+(define (edit-command)
+  (string-append "emacs " data-file))
+```

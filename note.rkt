@@ -2,10 +2,11 @@
 #lang racket
 
 (require racket/string)
+(require racket/system)
 
 ;; Files
 
-(define data-file "/Users/carlson/dev/racket/data.txt")
+(define data-file "/Users/carlson/dev/racket/note/data.txt")
 
 
 (define (get-data filename) 
@@ -94,6 +95,7 @@
   (list "---------------------------------------------"
         "  -a x y z  -- append x y z to the data-file"
         "  -c        -- line count of data file"
+        "  -e        -- edit data file"
         "  -l        -- location of data file"
         "  -r        -- random line"
         "  -s        -- show all data"
@@ -118,6 +120,8 @@
   (display data-file)
 )
 
+(define (edit-command)
+  (string-append "emacs " data-file))
 
 
 (define (process-args args) 
@@ -126,7 +130,7 @@
      [(string=? (car args) "-a") (save-string-guard (cdr args))  ]
      [(string=? (car args) "-c") (println (length  (get-string-list data-file)))  ]
      [(string=? (car args) "-l") (display-data-location)  ]
-     [(string=? (car args) "-e") (shell-execute #f "edit" data-file (current-directory) 'sw_shownormal)  ]
+     [(string=? (car args) "-e") (system  (edit-command))  ]
      [(string=? (car args) "-h") (display-help)]
      [(string=? (car args) "-r") (display (random-element (get-string-list data-file)))  ]
      [(string=? (car args) "-s") (display-data)  ]
