@@ -112,7 +112,7 @@
 
 ;; Process args
 
-(define args 
+(define get-args 
    (vector->list 
       (current-command-line-arguments)
    )
@@ -142,4 +142,4 @@
 
 ;; Main
 
-(process-args args)
+(process-args get-args)

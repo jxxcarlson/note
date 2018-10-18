@@ -38,3 +38,9 @@ editor, modify this bit of code:
 (define (edit-command)
   (string-append "emacs " data-file))
 ```
+
+## Compilation
+
+You can also compile this Racket script. Just do `raco exec note.rkt`.
+The result will be a file `note`. Link to it instead of `note.rkt`
+in your `.profile` file.
