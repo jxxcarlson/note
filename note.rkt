@@ -35,12 +35,15 @@
 
 ;; String lists
 
-(define (contains-word? word phrase) (string-contains? phrase word))
+(define (string-contains-ci? whole part)
+ (string-contains? (string-downcase whole) (string-downcase part)))
+
+(define (contains-word? word phrase) (string-contains-ci? phrase word))
 
 (define (filter-string-list key string-list) 
    (filter 
-     (curry contains-word? (string-downcase key))
-     (map string-downcase string-list)
+     (curry contains-word? key)
+     string-list
    )
 )
 
