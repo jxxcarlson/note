@@ -38,13 +38,22 @@
 (define (contains-word? word phrase) (string-contains? phrase word))
 
 (define (filter-string-list key string-list) 
-   (filter (curry contains-word? key) string-list))
+   (filter 
+     (curry contains-word? (string-downcase key))
+     (map string-downcase string-list)
+   )
+)
+
+(define (string-pad before after str)
+  (string-append before str after))
 
 (define (find-matches args)
   (display 
-    (string-concat 
-      (filter-string-list-many args (get-string-list data-file))
-      "\n"
+    (string-pad "\n" "\n\n"
+      (string-concat 
+        (filter-string-list-many args (get-string-list data-file))
+        "\n\n"
+      )
     )
   )
 )
