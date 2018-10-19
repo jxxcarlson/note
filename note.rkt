@@ -120,6 +120,7 @@
         "  -l        -- location of data file"
         "  -r        -- random line"
         "  -s        -- show all data"
+        "  -v        -- view data"
         "  x         -- show lines containging x"
         "  x y       -- show lines containg x and y"
         "---------------------------------------------" 
@@ -157,6 +158,9 @@
 (define backup-command
   (string-append "cp " data-file " " backup-file))
 
+(define read-command
+  (string-append "more " data-file))
+
 (define (edit-note)
   (begin
     (system clear-tmp-file-command)
@@ -179,6 +183,7 @@
      [(string=? (car args) "-h") (display-help)]
      [(string=? (car args) "-r") (display (random-element (get-string-list data-file)))  ]
      [(string=? (car args) "-s") (display-data)  ]
+     [(string=? (car args) "-v") (system read-command)  ]
      [else (find-matches args)]
   )
 )
