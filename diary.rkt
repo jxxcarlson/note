@@ -8,11 +8,11 @@
 
 (define data-path "/Users/carlson/dev/racket/note/")
 
-(define data-file (string-append data-path "data.txt"))
+(define data-file (string-append data-path "diary.txt"))
 
-(define tmp-file (string-append data-path "tmp.txt"))
+(define tmp-file (string-append data-path "diary-tmp.txt"))
 
-(define backup-file (string-append data-path "data.txt.bak"))
+(define backup-file (string-append data-path "diary.txt.bak"))
 
 (define (get-data filename) 
   (file->string filename)
