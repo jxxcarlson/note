@@ -1,4 +1,5 @@
-experiments/
 data.txt
-
+data.txt.bak
+tmp.txt
 note
+experiments/

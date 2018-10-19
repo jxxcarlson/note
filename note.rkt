@@ -6,8 +6,13 @@
 
 ;; Files
 
-(define data-file "/Users/carlson/dev/racket/note/data.txt")
+(define data-path "/Users/carlson/dev/racket/note/")
 
+(define data-file (string-append data-path "data.txt"))
+
+(define tmp-file (string-append data-path "tmp.txt"))
+
+(define backup-file (string-append data-path "data.txt.bak"))
 
 (define (get-data filename) 
   (file->string filename)
@@ -107,7 +112,9 @@
 
 (define help-strings 
   (list "---------------------------------------------"
-        "  -a x y z  -- append x y z to the data-file"
+        "  -a ...    -- aadd new note"
+        "  -aa ...   -- add new note using editor"
+        "  -b        -- back up data file"
         "  -c        -- line count of data file"
         "  -e        -- edit data file"
         "  -l        -- location of data file"
@@ -134,17 +141,41 @@
   (display data-file)
 )
 
-(define (edit-command)
+(define edit-command
   (string-append "emacs " data-file))
 
+(define edit-tmp-command
+  (string-append "emacs " tmp-file)
+)
+
+(define append-tmp-file-command
+  (string-append "cat " tmp-file " >>" data-file ";echo '--' >>" data-file))
+
+(define clear-tmp-file-command
+  (string-append "rm " tmp-file))
+
+(define backup-command
+  (string-append "cp " data-file " " backup-file))
+
+(define (edit-note)
+  (begin
+    (system clear-tmp-file-command)
+    (system edit-tmp-command)
+    (system append-tmp-file-command)
+    (println "done")
+  )
+  
+)
 
 (define (process-args args) 
   (cond 
      [(null? args) (display-help)]
      [(string=? (car args) "-a") (save-string-guard (cdr args))  ]
+     [(string=? (car args) "-aa") (edit-note)  ]
+     [(string=? (car args) "-b") (system backup-command)  ]
      [(string=? (car args) "-c") (println (length  (get-string-list data-file)))  ]
      [(string=? (car args) "-l") (display-data-location)  ]
-     [(string=? (car args) "-e") (system  (edit-command))  ]
+     [(string=? (car args) "-e") (system  edit-command)  ]
      [(string=? (car args) "-h") (display-help)]
      [(string=? (car args) "-r") (display (random-element (get-string-list data-file)))  ]
      [(string=? (car args) "-s") (display-data)  ]
