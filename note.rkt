@@ -8,17 +8,42 @@
 
 (define data-path "/Users/carlson/dev/racket/note/")
 
-(define data-file (string-append data-path "data.txt"))
+(define (get-file-name-aux)
+  (last
+    (string-split
+        (path->string 
+           (find-system-path 'run-file) 
+        )
+        "/"
+    )
+  )
+)
+
+(define (get-filename extension)
+  (add-extension (get-file-name-aux) ".txt"))
+
+(define (add-extension file-name extension)
+  (string-append file-name extension))
+
+(define (data-file-aux) 
+  (get-filename ".txt")
+)
+
+(define (backup-file-aux)
+  (get-filename ".txt.bak")
+)
+
+(define data-file (string-append data-path (data-file-aux)))
 
 (define tmp-file (string-append data-path "tmp.txt"))
 
-(define backup-file (string-append data-path "data.txt.bak"))
+(define backup-file (string-append data-path (backup-file-aux)))
 
 (define (get-data filename) 
   (file->string filename)
 )
 
-(define record-terminator "\n--\n")
+(define record-terminator "\n----\n")
 
 (define (get-string-list filename)
    (string-split 
@@ -120,6 +145,7 @@
         "  -l        -- location of data file"
         "  -r        -- random line"
         "  -s        -- show all data"
+        "  -t        -- show last few lines"
         "  -v        -- view data"
         "  x         -- show lines containging x"
         "  x y       -- show lines containg x and y"
@@ -161,6 +187,9 @@
 (define read-command
   (string-append "more " data-file))
 
+(define tail-command
+  (string-append "tail " data-file))
+
 (define (edit-note)
   (begin
     (system clear-tmp-file-command)
@@ -183,6 +212,7 @@
      [(string=? (car args) "-h") (display-help)]
      [(string=? (car args) "-r") (display (random-element (get-string-list data-file)))  ]
      [(string=? (car args) "-s") (display-data)  ]
+     [(string=? (car args) "-t") (system tail-command)  ]
      [(string=? (car args) "-v") (system read-command)  ]
      [else (find-matches args)]
   )
@@ -191,3 +221,4 @@
 ;; Main
 
 (process-args get-args)
+
