@@ -1,6 +1,7 @@
 # NOTE
 
-_Note_ is a Racket note-taking command-line tool.
+Note is a command-line tool for taking notes.
+It is written in Racket.
 
 ## Adding a note
 
