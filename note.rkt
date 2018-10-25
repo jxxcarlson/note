@@ -20,7 +20,7 @@
 )
 
 (define (get-filename extension)
-  (add-extension (get-file-name-aux) ".txt"))
+  (add-extension (get-file-name-aux) extension))
 
 (define (add-extension file-name extension)
   (string-append file-name extension))
@@ -91,6 +91,11 @@
   )
 )
 
+
+(define (last-item args)
+  (display 
+        (last (get-string-list data-file))))
+  
 (define (display-data)
   (display 
     (string-concat 
@@ -141,11 +146,11 @@
         "  -aa ...   -- add new note using editor"
         "  -b        -- back up data file"
         "  -c        -- line count of data file"
+        "  -d        -- location of data file"
         "  -e        -- edit data file"
-        "  -l        -- location of data file"
+        "  -l        -- show last item"
         "  -r        -- random line"
         "  -s        -- show all data"
-        "  -t        -- show last few lines"
         "  -v        -- view data"
         "  x         -- show lines containging x"
         "  x y       -- show lines containg x and y"
@@ -176,7 +181,7 @@
 )
 
 (define append-tmp-file-command
-  (string-append "cat " tmp-file " >>" data-file ";echo '--' >>" data-file))
+  (string-append "cat " tmp-file " >>" data-file ";echo '----' >>" data-file))
 
 (define clear-tmp-file-command
   (string-append "rm " tmp-file))
@@ -207,13 +212,14 @@
      [(string=? (car args) "-aa") (edit-note)  ]
      [(string=? (car args) "-b") (system backup-command)  ]
      [(string=? (car args) "-c") (println (length  (get-string-list data-file)))  ]
-     [(string=? (car args) "-l") (display-data-location)  ]
+     [(string=? (car args) "-d") (display-data-location)  ]
      [(string=? (car args) "-e") (system  edit-command)  ]
      [(string=? (car args) "-h") (display-help)]
+     [(string=? (car args) "-l") (last-item args)  ]
      [(string=? (car args) "-r") (display (random-element (get-string-list data-file)))  ]
      [(string=? (car args) "-s") (display-data)  ]
-     [(string=? (car args) "-t") (system tail-command)  ]
      [(string=? (car args) "-v") (system read-command)  ]
+     [(string=? (car args) "--test") (println backup-file)]
      [else (find-matches args)]
   )
 )
