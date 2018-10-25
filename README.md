@@ -1,46 +1,77 @@
 # NOTE
 
 _Note_ is a Racket note-taking command-line tool.
-Notes consist of a single line. To add a note, do
-this:
+
+## Adding a note
+
+To add a note, do either
+
+(1)
 
 ```
 $ note -a La di dah do day
 ```
 
+and then type <RETURN>. Or
+
+(2)
+
+```
+$ note -aa
+```
+
+This command will open an editor, e.g. emacs. Write
+your note, then save and exit.
+
+## Searching for a note
+
 To search for all notes containing `foo`, say
 `note foo`. To search for all notes containing
 `foo` and `bar`, say `note foo bar`. Etc.
+
+## Help
 
 For more information, say `note -h`.
 
 ## Installation
 
 1. Do `git clone https://github.com/jxxcarlson/note.git`
-   in some convenient directory on your machine.
+   in some convenient directory on your machine. Let's
+   imagine that it is in `Users/turing/stuff/`. You will
+   find the file `note.rkt`, which is the source text
+   for the `note` application.
 
-2. Do `touch data.txt`
+2. Edit line 9, `(define data-path "/Users/turing/stuff/")`,
+   so that it points to the path in (1)
 
-3. Edit line 9, `(define data-file "/Users/carlson/dev/racket/data.txt")`,
-   so that it points to `data.txt`
-
-4. In your `.profile`, create an alias pointng to `note.rkt`
-
-5. In your currenct directory, do `source ~/.profile`
-
-## Customization
-
-The `note` tool is configured so that running `note -e` will
-bring up the data file in emacs for editing. To use another
-editor, modify this bit of code:
+3. By default, the `note` application is configured
+   to use emacs as its editor. To used a different
+   editor, modify line 176-7:
 
 ```
 (define (edit-command)
   (string-append "emacs " data-file))
 ```
 
-## Compilation
+3. Compile the application using `raco exe note.rkt`.
+   This will produce the file `note`.
 
-You can also compile this Racket script. Just do `raco exec note.rkt`.
-The result will be a file `note`. Link to it instead of `note.rkt`
-in your `.profile` file.
+4. In your `.profile`, create an alias pointng to `note`
+
+5. In your current directory, do `source ~/.profile`
+
+## Notes
+
+- Your data is in `note.txt`
+
+- Use `note -b` to make a backup of your data. It
+  resides in `note.txt.bak`
+
+- Suppose you want to have an app for some other purpose,
+  say, a diary. Do (1) `cp note.rkt diary.rkt`
+  (2) `raco exe diary.rkt` (3) Then, in your `profile`,
+  make an alias pointing to `diary`.
+
+- Data format. The data for `note` is in the file `note.txt`.
+  Individual notes are separated by `"\n----\n"`, as defined
+  in line 46: `(define record-terminator "\n----\n")`
