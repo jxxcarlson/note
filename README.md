@@ -13,7 +13,7 @@ To add a note, do either
 $ note -a La di dah do day
 ```
 
-and then type <RETURN>. Or
+and then type RETURN, or do
 
 (2)
 
@@ -36,18 +36,20 @@ For more information, say `note -h`.
 
 ## Installation
 
+Please follow this simple, five-step installation process:
+
 1. Do `git clone https://github.com/jxxcarlson/note.git`
    in some convenient directory on your machine. Let's
    imagine that it is in `Users/turing/stuff/`. You will
    find the file `note.rkt`, which is the source text
    for the `note` application.
 
-2. Edit line 9, `(define data-path "/Users/turing/stuff/")`,
+2. Edit line 9, `(define data-path "/Users/carlson/dev/racket/note/")`,
    so that it points to the path in (1)
 
 3. By default, the `note` application is configured
    to use emacs as its editor. To used a different
-   editor, modify line 176-7:
+   editor, modify lines 176-7:
 
 ```
 (define (edit-command)
@@ -61,7 +63,9 @@ For more information, say `note -h`.
 
 5. In your current directory, do `source ~/.profile`
 
-## Notes
+You are now ready to use `note`.
+
+## Remarks
 
 - Your data is in `note.txt`
 
