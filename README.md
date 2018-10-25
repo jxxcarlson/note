@@ -49,19 +49,14 @@ Please follow this simple, five-step installation process:
 
 3. By default, the `note` application is configured
    to use emacs as its editor. To used a different
-   editor, modify lines 176-7:
+   editor, modify lines177: `(string-append "emacs " data-file))`
 
-```
-(define (edit-command)
-  (string-append "emacs " data-file))
-```
-
-3. Compile the application using `raco exe note.rkt`.
+4. Compile the application using `raco exe note.rkt`.
    This will produce the file `note`.
 
-4. In your `.profile`, create an alias pointng to `note`
+5. In your `.profile`, create an alias pointng to `note`
 
-5. In your current directory, do `source ~/.profile`
+6. In your current directory, do `source ~/.profile`
 
 You are now ready to use `note`.
 
