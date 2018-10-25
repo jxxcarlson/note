@@ -36,7 +36,9 @@ For more information, say `note -h`.
 
 ## Installation
 
-Please follow this simple, five-step installation process:
+Please follow the simple, five-step installation process
+described below. If you do not have Racket installed
+on your machine, go to the [Racket installer page](https://racket-lang.org/download/).
 
 1. Do `git clone https://github.com/jxxcarlson/note.git`
    in some convenient directory on your machine. Let's
