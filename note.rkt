@@ -81,12 +81,19 @@
   (string-append before str after))
 
 (define (find-matches args)
+  (let* 
+    (
+     [items-found (filter-string-list-many args (get-string-list data-file))] 
+     [n-items-found (length items-found)]
+    )
+    (display-items items-found n-items-found)
+   )
+)  
+
+(define (display-items items n-items)
   (display 
     (string-pad "\n" "\n\n"
-      (string-concat 
-        (filter-string-list-many args (get-string-list data-file))
-        "\n----\n"
-      )
+      (string-append (string-concat  items "\n----\n") "\n" (number->string n-items))
     )
   )
 )
@@ -123,6 +130,8 @@
   )
 )
 
+; > (string-concat '["one" "two" "three"] ":")
+; "one:two:three:"
 (define (string-concat strlist suffix)
   (string-trim
      (string-concat-aux "" strlist suffix)
