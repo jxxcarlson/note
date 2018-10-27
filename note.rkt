@@ -141,6 +141,15 @@
 (define (random-element list)
   (car (shuffle list)))
 
+(define (add-note args)
+  (begin
+    (save-string-guard args)
+    (println (length (get-string-list data-file)))
+  )
+)
+
+ 
+
 (define (save-string-guard args)
   (if (null? args)
     (display "-a option needs an argument")
@@ -204,21 +213,23 @@
 (define tail-command
   (string-append "tail " data-file))
 
-(define (edit-note)
+(define (add-note-using-editor)
   (begin
     (system clear-tmp-file-command)
     (system edit-tmp-command)
     (system append-tmp-file-command)
-    (println "done")
+    (println (length (get-string-list data-file)))
   )
   
 )
 
+; (save-string-guard (cdr args))
+
 (define (process-args args) 
   (cond 
      [(null? args) (display-help)]
-     [(string=? (car args) "-a") (save-string-guard (cdr args))  ]
-     [(string=? (car args) "-aa") (edit-note)  ]
+     [(string=? (car args) "-a") (add-note (cdr args)) ]
+     [(string=? (car args) "-aa") (add-note-using-editor)  ]
      [(string=? (car args) "-b") (system backup-command)  ]
      [(string=? (car args) "-c") (println (length  (get-string-list data-file)))  ]
      [(string=? (car args) "-d") (display-data-location)  ]
