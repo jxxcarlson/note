@@ -78,6 +78,6 @@ You are now ready to use `note`.
   Individual notes are separated by `"\n----\n"`, as defined
   in line 46: `(define record-terminator "\n----\n")`
 
-- The shell scrit `make.sh` automates the process of
+- The shell script `make.sh` automates the process of
   compiling `note.rkt`, copying `note.rkt` to `diary.rkt`
   and compileing the latter. Just run `sh make.sh`
