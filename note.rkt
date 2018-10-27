@@ -101,14 +101,15 @@
 
 (define (last-item args)
   (display 
-        (last (get-string-list data-file))))
+     (string-pad "=======\n" "\n======\n"
+        (last (get-string-list data-file))
+     )
+  )
+)
   
 (define (display-data)
-  (display 
-    (string-concat 
-       (get-string-list data-file)
-      "\n"
-    )
+  (display  
+    (string-concat  (get-string-list data-file)  "\n")
   )
 )
 
@@ -204,8 +205,12 @@
 (define clear-tmp-file-command
   (string-append "rm " tmp-file))
 
-(define backup-command
-  (string-append "cp " data-file " " backup-file))
+(define (do-backup)
+  (begin
+    (system (string-append "cp " data-file " " backup-file))
+    (println (length  (get-string-list data-file)))
+  )
+) 
 
 (define read-command
   (string-append "more " data-file))
@@ -230,7 +235,7 @@
      [(null? args) (display-help)]
      [(string=? (car args) "-a") (add-note (cdr args)) ]
      [(string=? (car args) "-aa") (add-note-using-editor)  ]
-     [(string=? (car args) "-b") (system backup-command)  ]
+     [(string=? (car args) "-b") (do-backup)  ]
      [(string=? (car args) "-c") (println (length  (get-string-list data-file)))  ]
      [(string=? (car args) "-d") (display-data-location)  ]
      [(string=? (car args) "-e") (system  edit-command)  ]
