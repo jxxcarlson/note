@@ -180,6 +180,7 @@
         "  -l        -- show last item"
         "  -r        -- random line"
         "  -s        -- show all data"
+        "  -size     -- size of data file"
         "  -v        -- view data"
         "  x         -- show lines containging x"
         "  x y       -- show lines containg x and y"
@@ -227,6 +228,9 @@
 (define read-command
   (string-append "more " data-file))
 
+(define data-file-size-command
+ (string-append "ls -lh " data-file))
+
 (define tail-command
   (string-append "tail " data-file))
 
@@ -256,6 +260,7 @@
      [(string=? (car args) "-r") (display (random-element (get-string-list data-file)))  ]
      [(string=? (car args) "-s") (display-data)  ]
      [(string=? (car args) "-v") (system read-command)  ]
+     [(string=? (car args) "-size") (system data-file-size-command)]
      [(string=? (car args) "--test") (println backup-file)]
      [else (find-matches args)]
   )
