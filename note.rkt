@@ -92,7 +92,7 @@
 
 (define (display-items items n-items)
   (display 
-    (string-pad "\n" "\n\n"
+    (string-pad "=======\n" "\n=======\n"
       (string-append (string-concat  items "\n----\n") "\n" (number->string n-items))
     )
   )
