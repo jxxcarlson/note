@@ -3,6 +3,10 @@
 
 (require racket/string)
 (require racket/system)
+(require gregor)
+
+
+(define (date-string) (date->iso8601 (today)))
 
 ;; Files
 
@@ -154,7 +158,13 @@
 (define (save-string-guard args)
   (if (null? args)
     (display "-a option needs an argument")
-    (save-string (string-concat args " ") ))
+    (save-string 
+      (string-append
+        (string-concat args " ") 
+        " // "
+        (date-string)
+      )
+    ))
 )
 
 ;; ???
@@ -200,7 +210,9 @@
 )
 
 (define append-tmp-file-command
-  (string-append "cat " tmp-file " >>" data-file ";echo '----' >>" data-file))
+  ; (string-append "cat " tmp-file " >>" data-file ";echo '----\n' >>" data-file ))
+  (string-append "cat " tmp-file " >>" data-file " ; echo `date` >>" data-file " ;echo '----' >>" data-file ))
+
 
 (define clear-tmp-file-command
   (string-append "rm " tmp-file))
