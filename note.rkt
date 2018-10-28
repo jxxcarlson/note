@@ -101,7 +101,7 @@
 
 (define (last-item args)
   (display 
-     (string-pad "=======\n" "\n======\n"
+     (string-pad "=======\n" "\n=======\n"
         (last (get-string-list data-file))
      )
   )
