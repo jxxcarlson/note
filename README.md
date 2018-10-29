@@ -60,6 +60,8 @@ on your machine, go to the [Racket installer page](https://racket-lang.org/downl
 
 6. In your current directory, do `source ~/.profile`
 
+7. Do `touch note.txt` to create an empty data file.
+
 You are now ready to use `note`.
 
 ## Remarks
