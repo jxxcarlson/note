@@ -57,21 +57,77 @@
 
 
 ; FIND NOTES
-(define (find-notes-base key)
+(define (by-body key)
   (query-list pgc "SELECT note FROM notes WHERE note LIKE '%' || $1 || '%'" key))
 
-(define (find-notes key)
+(define (by-title key)
+  (query-list pgc "SELECT note FROM notes WHERE title LIKE '%' || $1 || '%'" key))
+
+
+(define (find-notes method key)
   (display-list
-     (find-notes-base key)))
+     (method key)))
   
+;;;;;;;;;;;;
 
-  ;;;;;;;;;;;;;;;;;;;
 
+(define data-file "/Users/carlson/dev/racket/note/note.txt")
+
+(define eor "\n----\n")
+
+(define (get-data filename) 
+  (file->string filename)
+)
+
+(define (get-string-list filename)
+   (string-split 
+      (get-data filename)
+      eor
+    )
+)
+
+(define (add-record body)
+  (let* (
+          [title (car (string-split body "\n"))]
+        )
+      (insert-note title body)
+  )
+)
+
+
+(define (migrate filename)
+  (map add-record (get-string-list filename)))
+
+;;;;;;;;;;;;;;;;;;;
+
+
+(define (add-note args)
+  (if (null? args)
+    (display "-a option needs an argument")
+    (add-note-aux args)
+  )
+)
+
+
+(define (add-note-aux args)
+  (let* (
+          [body (string-concat args " ")]
+          [title (car (string-split body "\n"))]
+        )
+      (insert-note title body)
+  )
+)
 
 
 (define help-strings 
   (list "---------------------------------------------"
-        "-v          view notes                       "
+        "db -a          add note. First line used as title"
+        "db -h          show help"
+        "db -m          migrate data"
+        "db -t yada     show records with 'yada' in the title"
+        "db -v          view notes   "
+        "db -x          experimental command   "
+        "db yada        show notes matching 'yada'    "
         "---------------------------------------------" 
 ))
 
@@ -110,9 +166,13 @@
 (define (process-args args) 
   (cond 
      [(null? args) (display-help)]
+     [(string=? (car args) "-a") (add-note (cdr args)) ]
+     [(string=? (car args) "-h") (display-help) ]
+     [(string=? (car args) "-m") (migrate data-file) ]
+     [(string=? (car args) "-t") (find-notes by-title (car args)) ]
      [(string=? (car args) "-v") (display-notes) ]
-     [(string=? (car args) "-x") (println (string-append "Test: " (cadr args))) ]
-     [else (find-notes (car args))]
+     [(string=? (car args) "-x") (println (length (get-string-list data-file)))]
+     [else (find-notes by-body (car args))]
   )
 )
 
