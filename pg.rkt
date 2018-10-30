@@ -46,8 +46,13 @@
 (define (display-list the-list)
   (let ([n (length the-list)])
     (begin 
-     (map display-record the-list)
-     n)))
+       (display "\n")
+       (map display-record the-list)
+       (println n)
+       (display "\n")
+    )
+  )
+)
 
 
 
@@ -58,10 +63,10 @@
 
 ; FIND NOTES
 (define (by-body key)
-  (query-list pgc "SELECT note FROM notes WHERE note LIKE '%' || $1 || '%'" key))
+  (query-list pgc "SELECT note FROM notes WHERE LOWER(note) LIKE '%' || LOWER($1) || '%'" key))
 
 (define (by-title key)
-  (query-list pgc "SELECT note FROM notes WHERE title LIKE '%' || $1 || '%'" key))
+  (query-list pgc "SELECT note FROM LOWER(notes) WHERE title LIKE '%' || LOWER($1) || '%'" key))
 
 
 (define (find-notes method key)
