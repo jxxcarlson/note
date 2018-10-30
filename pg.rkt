@@ -5,6 +5,7 @@
 (require racket/system)
 (require db)
 (require db/util/datetime)
+(require libuuid)
 
 
 (define pgc (postgresql-connect #:user "carlson"
@@ -23,29 +24,31 @@
 
 
 ; CREATE RECORD
-(define (insert-note note)
+; CREATE RECORD
+(define (insert-note title note)
   (query-exec
       pgc
-      "INSERT INTO notes VALUES ($1, $2, $3, $4)"
-      9999 (timestamp) (timestamp) note
+      "INSERT INTO notes VALUES ($1, $2, $3, $4, $5)"
+      (uuid-generate) (timestamp) (timestamp) title note
   ))
 
-(define (insert-note1 note)
-  (query-exec
-      pgc
-      "INSERT INTO notes VALUES (id, created_on, modified_on, note)"
-       9999 (timestamp) (timestamp) note))
 
 
 ; LIST ALL RECORDS
 (define (list-notes)
    (query-list pgc "select note from notes order by id"))
 
+(define record-terminator "\n================\n")
+
+(define (display-record record)
+  (display (string-append record record-terminator))
+)
 (define (display-list the-list)
   (let ([n (length the-list)])
     (begin 
-     (map displayln the-list)
+     (map display-record the-list)
      n)))
+
 
 
 (define (display-notes)
