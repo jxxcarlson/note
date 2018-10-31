@@ -61,17 +61,60 @@
     (display-list (list-notes))))
 
 
+(define (count-notes)
+  (println 
+     (query-maybe-value  pgc "SELECT COUNT(*) FROM notes")
+  ))
+
+(define (build-query-aux acc args)
+  (if (null? args)
+       acc
+       (build-query-aux (string-append acc " AND " (car args)) (cdr args))
+  ))
+
+(define (build-query args)
+  (build-query-aux (car args) (cdr args)))
+
 ; FIND NOTES
-(define (by-body key)
-  (query-list pgc "SELECT note FROM notes WHERE LOWER(note) LIKE '%' || LOWER($1) || '%'" key))
 
-(define (by-title key)
-  (query-list pgc "SELECT note FROM LOWER(notes) WHERE title LIKE '%' || LOWER($1) || '%'" key))
+(define (replace-template param)
+  (string-replace "(LOWER(note) LIKE '%' || LOWER($ARG) || '%')" "ARG" param))
+
+(define query-note
+  "SELECT note FROM notes WHERE (LOWER(note) LIKE '%' || LOWER($1) || '%')")
+
+(define query-two-keys
+  (build-query 
+    (list query-note (replace-template "2"))))
+
+(define query-three-keys
+  (build-query 
+    (list query-note 
+          (replace-template "2")
+          (replace-template "3")
+    )))
+
+(define query-four-keys
+  (build-query 
+    (list query-note 
+          (replace-template "2")
+          (replace-template "3")
+          (replace-template "4")
+    )))
 
 
-(define (find-notes method key)
+(define (by-body keys)
+  (cond 
+    [(= (length keys) 1) (query-list pgc query-note (car keys))]
+    [(= (length keys) 2)  (query-list pgc query-two-keys (car keys) (cadr keys))]
+    [(= (length keys) 3) (query-list pgc query-three-keys (car keys) (cadr keys) (caddr keys))]
+    [else (query-list pgc query-four-keys (car keys) (cadr keys) (caddr keys) (cadddr keys))]
+  ))
+
+
+(define (find-notes method keys)
   (display-list
-     (method key)))
+     (method keys)))
   
 ;;;;;;;;;;;;
 
@@ -126,13 +169,14 @@
 
 (define help-strings 
   (list "---------------------------------------------"
-        "db -a          add note. First line used as title"
-        "db -h          show help"
-        "db -m          migrate data"
-        "db -t yada     show records with 'yada' in the title"
-        "db -v          view notes   "
-        "db -x          experimental command   "
-        "db yada        show notes matching 'yada'    "
+        "note -a          add note. First line used as title"
+        "note -c          count notes"
+        "note -h          show help"
+        "note -m          migrate data"
+        "note -v          view notes"
+        "note -x          experimental command"
+        "note yada        show notes matching 'yada'"
+        "note foo bar     show notes matching 'foo' and 'bar'"
         "---------------------------------------------" 
 ))
 
@@ -172,14 +216,15 @@
   (cond 
      [(null? args) (display-help)]
      [(string=? (car args) "-a") (add-note (cdr args)) ]
+     [(string=? (car args) "-c") (count-notes) ]
      [(string=? (car args) "-h") (display-help) ]
      [(string=? (car args) "-m") (migrate data-file) ]
-     [(string=? (car args) "-t") (find-notes by-title (car args)) ]
      [(string=? (car args) "-v") (display-notes) ]
      [(string=? (car args) "-x") (println (length (get-string-list data-file)))]
-     [else (find-notes by-body (car args))]
+     [else (find-notes by-body args)]
   )
 )
+
 
 ;; Main
 

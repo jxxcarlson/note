@@ -10,3 +10,4 @@ note.txt
 *.bak
 diary.rkt
 list*
+make2.sh

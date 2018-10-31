@@ -1,7 +1,7 @@
 color=`tput setaf 48`
 reset=`tput setaf 7`
 
-echo "${color}Compiling note.rkt to note ,,, ${reset}"
+echo "${color}Compiling pg.rkt to note ,,, ${reset}"
 raco exe note.rkt
 
 echo "${color}Coping note to diary ... ${reset}"
